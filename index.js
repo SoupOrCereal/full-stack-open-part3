@@ -28,6 +28,11 @@ app.get('/', (request, response) => {
   response.send('<marquee scrollamount="32"><h1>Server Says :: "bee bop boop"</h1></marquee>')
 })
 
+app.get('/info', (request, response) => {
+    response.send(`<p>Phonebook has info for ${persons.length} people<p><br />
+                        ${new Date().toDateString()} ${new Date().toLocaleTimeString()}`);
+  })
+
 app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
