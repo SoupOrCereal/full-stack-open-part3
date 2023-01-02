@@ -1,7 +1,9 @@
 const express = require('express')
 const app = express()
 
-const persons = [
+app.use(express.json())
+
+let persons = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -56,11 +58,31 @@ app.delete('/api/persons/:id', (request, response) => {
   //console.log('delete>>/api/persons/:id', request)
   const id = Number(request.params.id)
   delPerson = persons.filter(person => person.id !== id)
-
-  delPerson?response.status(204).end():response.status(404).end()
-
   // Functionality of delete added.
   // ToDo :: apply deletion of person
+  delPerson?response.status(204).end():response.status(404).end()
+})
+ 
+app.post('/api/persons', (request, response) => {
+  //console.log('post>>/api/persons', request)
+  console.log('persons POST received, body:', request.body)
+  const body = request?.body
+
+  if (!body || !body.name) { 
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number || false,
+    id: Math.ceil(Math.random() * 1000000) // "Generate a new id for the phonebook entry with the Math.random"
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 // Start Server

@@ -1,10 +1,18 @@
+get http://localhost:3001/api/persons
+###
 get http://localhost:3001/BadRequest
 ### 
 get http://localhost:3001/info
 ###
-get http://localhost:3001/api/persons
-###
-@id = 1
+@id = 100
 get http://localhost:3001/api/persons/{{id}}
 ###
-delete url HTTP/1.1 http://localhost:3001/api/persons/{{id}}
+delete http://localhost:3001/api/persons/{{id}}
+###
+post http://localhost:3001/api/persons HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Rest Test",
+    "number": "867-5309"
+}
