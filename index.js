@@ -57,9 +57,8 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
   //console.log('delete>>/api/persons/:id', request)
   const id = Number(request.params.id)
-  delPerson = persons.filter(person => person.id !== id)
-  // Functionality of delete added.
-  // ToDo :: apply deletion of person
+  delPerson = persons.find(person => person.id === id)
+  persons = persons.filter(person => person.id !== id);
   delPerson?response.status(204).end():response.status(404).end()
 })
  
@@ -68,9 +67,21 @@ app.post('/api/persons', (request, response) => {
   console.log('persons POST received, body:', request.body)
   const body = request?.body
 
-  if (!body || !body.name) { 
+  if (!body) { 
     return response.status(400).json({ 
-      error: 'content missing' 
+      error: 'no content provided' 
+    })
+  }else if (!body.name) { 
+    return response.status(400).json({ 
+      error: 'Name missing' 
+    })
+  }else if (!body.number) { 
+    return response.status(400).json({ 
+      error: 'Number missing' 
+    })
+  }else if (persons.find(person=>person.name===body.name)) { 
+    return response.status(400).json({ 
+      error: 'That name already exists in the phonebook' 
     })
   }
 
